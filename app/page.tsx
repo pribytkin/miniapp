@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { SearchBar } from '@/components/search/SearchBar'
 import { CategoryGrid } from '@/components/categories/CategoryGrid'
 import { QuickFilters } from '@/components/filters/QuickFilters'
@@ -25,6 +25,26 @@ export default function Home() {
   const [isFiltering, setIsFiltering] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const loadSpecialists = useCallback(async () => {
+    setIsFiltering(true)
+    setError(null)
+    try {
+      const { data, error } = await api.specialists.list({
+        search: searchQuery,
+        availability: activeFilters.availability ? 'available' : undefined,
+        category_id: selectedCategory || undefined,
+        location_type: undefined // Will be added when location type filter is implemented
+      })
+
+      if (error) throw new Error(error)
+      setSpecialists(data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load specialists')
+    } finally {
+      setIsFiltering(false)
+    }
+  }, [searchQuery, activeFilters.availability, selectedCategory])
+
   useEffect(() => {
     // Initialize Telegram WebApp
     initTelegramApp()
@@ -38,7 +58,7 @@ export default function Home() {
     if (!isInitialLoading) {
       loadSpecialists()
     }
-  }, [activeFilters, searchQuery, selectedCategory, isInitialLoading])
+  }, [activeFilters, searchQuery, selectedCategory, isInitialLoading, loadSpecialists])
 
   const loadData = async () => {
     setIsInitialLoading(true)
@@ -58,26 +78,6 @@ export default function Home() {
       setError(err instanceof Error ? err.message : 'Failed to load data')
     } finally {
       setIsInitialLoading(false)
-    }
-  }
-
-  const loadSpecialists = async () => {
-    setIsFiltering(true)
-    setError(null)
-    try {
-      const { data, error } = await api.specialists.list({
-        search: searchQuery,
-        availability: activeFilters.availability ? 'available' : undefined,
-        category_id: selectedCategory || undefined,
-        location_type: undefined // Will be added when location type filter is implemented
-      })
-
-      if (error) throw new Error(error)
-      setSpecialists(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load specialists')
-    } finally {
-      setIsFiltering(false)
     }
   }
 
@@ -104,8 +104,7 @@ export default function Home() {
   }
 
   const handleViewProfile = (specialist: Specialist) => {
-    // Navigate to specialist profile
-    // Will be implemented when profile page is ready
+    window.location.href = `/specialists/${specialist.id}`
   }
 
   if (error) {

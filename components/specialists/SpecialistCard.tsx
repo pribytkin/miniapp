@@ -20,12 +20,6 @@ const availabilityColors = {
     [AvailabilityStatus.OFFLINE]: "text-gray-500",
 }
 
-const availabilityText = {
-    [AvailabilityStatus.AVAILABLE]: "Доступний",
-    [AvailabilityStatus.BUSY]: "Зайнятий",
-    [AvailabilityStatus.OFFLINE]: "Не в мережі",
-}
-
 export function SpecialistCard({
     specialist,
     onContact,
@@ -76,7 +70,10 @@ export function SpecialistCard({
                             </div>
                             <div className={`flex items-center gap-1 text-sm ${availabilityColors[specialist.availability_status]}`}>
                                 <Clock className="h-3.5 w-3.5" />
-                                <span className="text-xs whitespace-nowrap">{availabilityText[specialist.availability_status]}</span>
+                                <span className="text-xs whitespace-nowrap">
+                                    {specialist.availability_status === "available" ? "Доступний" :
+                                        specialist.availability_status === "busy" ? "Зайнятий" : "Не в мережі"}
+                                </span>
                             </div>
                         </div>
 

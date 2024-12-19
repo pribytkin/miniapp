@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 // Telegram WebApp type
 declare global {
   interface Window {
-    Telegram: {
+    Telegram?: {
       WebApp: {
         ready(): void
         close(): void

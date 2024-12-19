@@ -62,13 +62,12 @@ export const api = {
         },
 
         getById: async (id: number): Promise<ApiResponse<Specialist>> => {
-            return fetchWithError<Specialist>(`${API_BASE_URL}/specialists/${id}`)
+            return fetchWithError<Specialist>(`${API_BASE_URL}/specialists/${id}/`)
         },
 
         updateStatus: async (id: number, status: string): Promise<ApiResponse<Specialist>> => {
-            return fetchWithError<Specialist>(`${API_BASE_URL}/specialists/${id}/status`, {
-                method: 'PUT',
-                body: JSON.stringify({ status })
+            return fetchWithError<Specialist>(`${API_BASE_URL}/specialists/${id}/status/?status=${status}`, {
+                method: 'PUT'
             })
         }
     },
@@ -81,17 +80,17 @@ export const api = {
 
     districts: {
         list: async (): Promise<ApiResponse<{ id: number; name: string; description: string }[]>> => {
-            return fetchWithError(`${API_BASE_URL}/districts/`)
+            return fetchWithError(`${API_BASE_URL}/locations/locations/nearby/`)
         }
     },
 
     reviews: {
         listBySpecialist: async (specialistId: number): Promise<ApiResponse<Review[]>> => {
-            return fetchWithError<Review[]>(`${API_BASE_URL}/specialists/${specialistId}/reviews`)
+            return fetchWithError<Review[]>(`${API_BASE_URL}/reviews/specialists/${specialistId}/reviews/`)
         },
 
         create: async (specialistId: number, review: { user_id: string; rating: number; comment: string }): Promise<ApiResponse<Review>> => {
-            return fetchWithError<Review>(`${API_BASE_URL}/specialists/${specialistId}/reviews`, {
+            return fetchWithError<Review>(`${API_BASE_URL}/reviews/specialists/${specialistId}/reviews/`, {
                 method: 'POST',
                 body: JSON.stringify(review)
             })
@@ -100,13 +99,13 @@ export const api = {
 
     services: {
         listBySpecialist: async (specialistId: number): Promise<ApiResponse<Service[]>> => {
-            return fetchWithError<Service[]>(`${API_BASE_URL}/specialists/${specialistId}/services`)
+            return fetchWithError<Service[]>(`${API_BASE_URL}/services/specialists/${specialistId}/services/`)
         }
     },
 
     locations: {
         listBySpecialist: async (specialistId: number): Promise<ApiResponse<Location[]>> => {
-            return fetchWithError<Location[]>(`${API_BASE_URL}/specialists/${specialistId}/locations`)
+            return fetchWithError<Location[]>(`${API_BASE_URL}/locations/specialists/${specialistId}/locations/`)
         }
     }
 } 

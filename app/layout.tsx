@@ -25,7 +25,10 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        <script src="https://telegram.org/js/telegram-web-app.js" />
+        <script
+          src="https://telegram.org/js/telegram-web-app.js"
+          async
+        />
       </head>
       <body className={cn(
         "min-h-[100dvh] bg-background font-sans antialiased overflow-x-hidden",
