@@ -1,6 +1,6 @@
-import { Category, Specialist, Review, Service, Location } from '@/types'
+import { Category, Specialist, Review, Service, Location } from '../types'
 
-const API_BASE_URL = '/api/v1'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://secrets-gospel-bob-dreams.trycloudflare.com/api/v1'
 
 const DEFAULT_HEADERS = {
     'Content-Type': 'application/json',
